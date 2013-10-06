@@ -1,73 +1,74 @@
 <html ng-app="app">
-	<head>
-		<title>
-			Angular.js + Pdf.js test
-		</title>
-	</head>
-	<body ng-controller="MainCtrl">
-		<p>
-			{{text}}
-		</p>
-		<div style="float:left">
-			<h3>
-				From MainCtrl:
-			</h3>
-			<canvas id="canvas">
-			</canvas>
-		</div>
-		<div style="float:right">
-			<h3>
-				From view:
-			</h3>
-			<canvas id="canvas2">
-			</canvas>
-			{{pdfservice.render("canvas2","audi.pdf")}}
-		</div>
-	</body>
-	<script src="angular.js">
-								
-	</script>
-	<script src="pdf.js">
-								
-	</script>
-	<script>
-								var app = angular.module("app", []);
+<head>
+    <title>
+        Angular.js + Pdf.js test
+    </title>
+</head>
+<body ng-controller="MainCtrl">
+<p>
+    {{text}}
+</p>
 
-							app.controller("MainCtrl", ['$scope', 'pdfservice', function($scope, pdfservice) {
-								$scope.text = "Pdf.js with Angular.js test";
+<div style="float:left">
+    <h3>
+        From MainCtrl:
+    </h3>
+    <canvas id="canvas">
+    </canvas>
+</div>
+<div style="float:right">
+    <h3>
+        From view:
+    </h3>
+    <canvas id="canvas2">
+    </canvas>
+    {{pdfservice.render("canvas2","audi.pdf")}}
+</div>
+</body>
+<script src="angular.js">
 
-								var pdf = "audi.pdf";
+</script>
+<script src="pdf.js">
 
-								// directly
-								pdfservice.render('canvas', pdf);
+</script>
+<script>
+    var app = angular.module("app", []);
+
+    app.controller("MainCtrl", ['$scope', 'pdfservice', function ($scope, pdfservice) {
+        $scope.text = "Pdf.js with Angular.js test";
+
+        var pdf = "audi.pdf";
+
+        // directly
+        // pdfservice.render('canvas', pdf);
 
 
-								// passed by $scope 
-								$scope.pdfservice = pdfservice;
-							}]);
+        // passed by $scope
+        $scope.pdfservice = pdfservice;
+    }]);
 
-							app.service("pdfservice", [function() {
+    app.service("pdfservice", [function () {
 
-								this.render = function(canvasId, pdfFile) {
-									PDFJS.getDocument(pdfFile).then(function(pdf) {
-										// Using promise to fetch the page
-										pdf.getPage(1).then(function(page) {
-											var scale = 0.45;
-											var viewport = page.getViewport(scale);
+        this.render = function (canvasId, pdfFile) {
+            PDFJS.getDocument(pdfFile).then(function (pdf) {
+                // Using promise to fetch the page
+                pdf.getPage(1).then(function (page) {
+                    var scale = 0.45;
+                    var viewport = page.getViewport(scale);
 
-											var canvas = document.getElementById(canvasId);
-											var context = canvas.getContext('2d');
-											canvas.height = 400; //viewport.height;
-											canvas.width = 500; //viewport.width;
-											var renderContext = {
-												canvasContext: context,
-												viewport: viewport
-											};
-											page.render(renderContext);
-										});
-									});
-								}
-							}]);
-	</script>
+                    var canvas = document.getElementById(canvasId);
+                    var context = canvas.getContext('2d');
+                    canvas.height = 400; //viewport.height;
+                    canvas.width = 500; //viewport.width;
+                    var renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    page.render(renderContext);
+                });
+            });
+        }
+    }]);
+</script>
 
 </html>
